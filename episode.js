@@ -1,3 +1,5 @@
+import request from 'request'
+
 export function getNewEpisodes(podcastXML, index) {
 
 	var rv = []
@@ -10,4 +12,17 @@ export function getNewEpisodes(podcastXML, index) {
 	}
 
 	return rv
+}
+
+export function downloadEpisode(url) {
+	
+	return new Promise((resolve, reject) => {
+		request(url, (err, res, data) => {
+			if (err) {
+				reject(err)
+			}
+
+			resolve(data)
+		})
+	})
 }
