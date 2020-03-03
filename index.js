@@ -1,9 +1,14 @@
-import request from 'request'
 import parser from 'node-podcast-parser'
-import sanitize from 'sanitize-filename'
 
 import podcastXML from './request'
-import {getNewEpisodes} from './episode'
+import { getNewEpisodes, buildPath, downloadEpisode, updateConfig, saveFile } from './episode'
+
+var config = {
+	"http://perma.rtl.lu/podcastaudio/1351581.mp3": {},
+	"http://perma.rtl.lu/podcastaudio/1352487.mp3": {},
+	"http://perma.rtl.lu/podcastaudio/1355023.mp3": {},
+	"http://perma.rtl.lu/podcastaudio/1353669.mp3": {}
+}
 
 podcastXML('https://www.rtl.lu/podcast/feed/radio_carteblanche_fb.xml')
 	.then((data) => {
@@ -13,17 +18,19 @@ podcastXML('https://www.rtl.lu/podcast/feed/radio_carteblanche_fb.xml')
 				return
 			}
 
-			var episodes = getNewEpisodes(content, {
-				"http://perma.rtl.lu/podcastaudio/1351581.mp3": {},
-				"http://perma.rtl.lu/podcastaudio/1352487.mp3": {},
-				"http://perma.rtl.lu/podcastaudio/1355023.mp3": {},
-				"http://perma.rtl.lu/podcastaudio/1353669.mp3": {}
-			})
-
-			var path = sanitize(content.title)
+			var episodes = getNewEpisodes(content, config)
 
 			for (var i = 0; i < episodes.length; i++) {
-				
+
+				var current = episodes[i]
+				console.log(current)
+
+				var path = buildPath(current, content.title)
+				console.log(path)
+
+ 				downloadEpisode(current.guid)
+					.then((data) => saveFile(data, path))
+					.then((filename) => updateConfig(config, current, filename))
 			}
 		})
 	})
