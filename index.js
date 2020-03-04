@@ -1,6 +1,7 @@
 import parser from 'node-podcast-parser'
 
 import podcastXML from './request'
+import FeedConfig from './feedConfig'
 import { getNewEpisodes, buildPath, downloadEpisode, updateConfig, saveFile } from './episode'
 
 var config = {
@@ -10,6 +11,16 @@ var config = {
 	"http://perma.rtl.lu/podcastaudio/1353669.mp3": {}
 }
 
+async function main() {
+	let feed = new FeedConfig()
+	await feed.init(".")
+
+	let isDownloaded = feed.isDownloaded("http://perma.rtl.lu/podcastaudio/1354985.mp3")
+	console.log(isDownloaded)
+}
+
+main()
+/*
 podcastXML('https://www.rtl.lu/podcast/feed/radio_carteblanche_fb.xml')
 	.then((data) => {
 		parser(data, (err, content) => {
@@ -34,3 +45,4 @@ podcastXML('https://www.rtl.lu/podcast/feed/radio_carteblanche_fb.xml')
 			}
 		})
 	})
+*/
