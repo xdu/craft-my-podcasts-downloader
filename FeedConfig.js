@@ -5,29 +5,14 @@ const CONFIG = 'feed.json'
 
 class FeedConfig {
 
-	constructor() {
-		this._downloaded = []
-	}
-
-	// this init() should be async
-	//
-	init(folder) {
+	constructor(folder) {
 
 		this.path = folder
-		let fp = path.join(this.path, CONFIG)
+		this._downloaded = []
+ 		this.filename = path.join(this.path, CONFIG)
 
-		return new Promise( (resolve, reject) => {
-
-			fs.readFile(fp, (err, data) => {
-				if (! err) {
-					this._downloaded = JSON.parse(data)
-
-				} else {
-					console.error(err)
-				}
-				resolve()
-			})
-		})
+		let data = fs.readFileSync(this.filename)
+		this._downloaded = JSON.parse(data)
 	}
 
 	isDownloaded(id) {
@@ -39,6 +24,14 @@ class FeedConfig {
 			}
 		}
 		return false
+	}
+
+	add(record) {
+		this._downloaded.push(record)
+	}
+
+	save() {
+		fs.writeFileSync(this.filename, JSON.stringify(this._downloaded))
 	}
 }
 

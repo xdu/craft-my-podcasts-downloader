@@ -1,4 +1,3 @@
-import parser from 'node-podcast-parser'
 import request from 'request'
 import sanitize from 'sanitize-filename'
 import path from 'path'
@@ -12,56 +11,33 @@ export default class Feed {
     constructor( url, folder ) {
         this.url = url
         this.folder = folder
-        this.config = new FeedConfig()
-    }
-
-    save() {
-        this.config.save()
     }
 
     async download() {
 
-        await this.config.init(this.folder)
-        
-        podcastXML( this.url )
-            .then( (data) => {
-                parser(data, (err, content) => {
+		let config = new FeedConfig(this.folder)
 
-                    if (err) {
-                        console.error('Parsing error', err)
-                        return
-                    }
-        
-                    console.log(content)
-                    this.getNewEpisodes(content, this.config)
-        
-                })
-            })
-    }
+        let podcast = await podcastXML(this.url)
 
-    async getNewEpisodes(podcast, config) {
-    
-        for (var i = 0; i < podcast.episodes.length; i++) {
-            var current = podcast.episodes[i]
+		for (var i = 0; i < podcast.episodes.length; i++) {
 
-            if (config.isDownloaded(current.guid)) {
-                continue
-            }
+			var current = podcast.episodes[i]
 
-            await this.downloadEpisode(current)
-        }
+			if (config.isDownloaded(current.guid)) {
+				console.log("skip " + current.guid)
+				continue
+			}
 
-    }
+			let media = "" //await this.downloadAudio(current.guid)
 
-    downloadEpisode(episode) {
+			let filename = this.buildFilename(current)
+			this.saveFile(media, filename)
+			console.log("save " + filename)
 
-        let filename = this.buildFilename(episode)
-        console.log(filename)
+			config.add({ ...current, filename })
+		}
 
-        this.downloadAudio(episode.guid)
-            .then((data) => this.saveFile(data, filename))
-            .then((filename) => this.config.add({ ...episode, filename }))
-
+		config.save()
     }
 
     buildFilename(episode) {
@@ -85,12 +61,8 @@ export default class Feed {
     saveFile(data, filename) {
 
         let fpath = path.join(this.folder, filename)
-
-        return new Promise((resolve, reject) => {
-    
-            fs.writeFile(fpath, data, (err) => {
-                err ? reject(err) : resolve(filename)
-            })
+		fs.writeFileSync(fpath, data, (err) => {
+            console.error(err)
         })
     }
 

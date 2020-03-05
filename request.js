@@ -1,4 +1,5 @@
 import request from 'request'
+import parser from 'node-podcast-parser'
 
 export default function podcastXML(url) {
 
@@ -9,7 +10,14 @@ export default function podcastXML(url) {
 				reject("Network error");
 			}
 
-			resolve(data)
+			parser(data, (err, podcast) => {
+				if (err) {
+					reject('Parsing error')
+				}
+
+				console.log(podcast)
+				resolve(podcast)
+			})
 		})
 	})
 
