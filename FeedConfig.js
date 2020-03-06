@@ -31,6 +31,7 @@ class FeedConfig {
 	}
 
 	save() {
+		console.log("save " + JSON.stringify(this._downloaded))
 		fs.writeFileSync(this.filename, JSON.stringify(this._downloaded))
 	}
 }

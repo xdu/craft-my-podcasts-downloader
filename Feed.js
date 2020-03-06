@@ -28,7 +28,7 @@ export default class Feed {
 				continue
 			}
 
-			let media = "" //await this.downloadAudio(current.guid)
+			let media = await this.downloadAudio(current.guid)
 
 			let filename = this.buildFilename(current)
 			this.saveFile(media, filename)
