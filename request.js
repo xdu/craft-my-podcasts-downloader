@@ -15,7 +15,7 @@ export default function podcastXML(url) {
 					reject('Parsing error')
 				}
 
-				console.log(podcast)
+				//console.log(podcast)
 				resolve(podcast)
 			})
 		})

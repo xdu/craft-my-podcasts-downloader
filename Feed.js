@@ -24,11 +24,11 @@ export default class Feed {
 			var current = podcast.episodes[i]
 
 			if (config.isDownloaded(current.guid)) {
-				console.log("skip " + current.guid)
+				//console.log("skip " + current.guid)
 				continue
 			}
 
-			let media = await this.downloadAudio(current.guid)
+			let media = await this.downloadAudio(current.enclosure.url)
 
 			let filename = this.buildFilename(current)
 			this.saveFile(media, filename)

@@ -1,0 +1,16 @@
+{
+    "feeds": [
+        { 
+            "url": "https://www.rtl.lu/podcast/feed/radio_carteblanche_fb.xml", 
+            "directory": "C:/Users/xdu/Documents/Podcasts/rtl"
+        },
+        { 
+            "url": "http://radiofrance-podcast.net/podcast09/rss_10009.xml", 
+            "directory" : "C:/Users/xdu/Documents/Podcasts/geopolitique"
+        },
+        {
+            "url": "https://podcasts.files.bbci.co.uk/p02pc9tn.rss",
+            "directory": "C:/Users/xdu/Documents/Podcasts/6minute"
+        }
+    ]
+}

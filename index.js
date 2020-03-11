@@ -1,9 +1,18 @@
 
 import Feed from './Feed'
+import getConfig from './config'
 
 function main() {
-	let feed = new Feed("https://www.rtl.lu/podcast/feed/radio_carteblanche_fb.xml", "rtl")
-	feed.download()
+	
+	let feeds = getConfig()
+	for (let i = 0; i < feeds.length; i ++) {
+
+		const{ url, directory } = feeds[i]
+		//console.log(url, directory)
+
+		const feed = new Feed(url, directory)
+		feed.download()
+	}
 }
 
 main()

@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-const CONFIG = 'feed.json'
+const CONFIG = 'content.json'
 
 class FeedConfig {
 
@@ -11,8 +11,10 @@ class FeedConfig {
 		this._downloaded = []
  		this.filename = path.join(this.path, CONFIG)
 
-		let data = fs.readFileSync(this.filename)
-		this._downloaded = JSON.parse(data)
+		if (fs.existsSync(this.filename)) {
+			let data = fs.readFileSync(this.filename)
+			this._downloaded = JSON.parse(data)
+		}
 	}
 
 	isDownloaded(id) {
@@ -31,7 +33,7 @@ class FeedConfig {
 	}
 
 	save() {
-		console.log("save " + JSON.stringify(this._downloaded))
+		//console.log("save " + JSON.stringify(this._downloaded))
 		fs.writeFileSync(this.filename, JSON.stringify(this._downloaded))
 	}
 }
