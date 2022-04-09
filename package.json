@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "node-podcast-parser": "^2.3.0",
     "request": "^2.88.2",
     "sanitize-filename": "^1.6.3"
